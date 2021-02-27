@@ -12,7 +12,7 @@ exports.roles = (function() {
     
      ac.grant("admin")
         .extend("basic")
-        .extend("supervisor")
+        .extend("manager")
         .updateAny("profile")
         .deleteAny("profile")
     
