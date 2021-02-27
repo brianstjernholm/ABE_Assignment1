@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-var Room = require('./Room');
+var Room = require('./room.js').schema;
 
 const hotelSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    rooms: ['Room']
+    rooms: [Room]
     //rooms: {type: mongoose.Schema.Types.ObjectId, ref: 'Room'}
 });
 

@@ -6,19 +6,32 @@ module.exports.homepage = async function (req, res) {
 }
 
 module.exports.listHotels = async function (req, res) {
+    //var hotels = db.find
     res.send('Her skal der sendes en liste med hoteller tilbage fra databasen')
 }
 
 module.exports.addHotel = async function (req, res) {
-    let roomarray = [];
-    for (i=0, i < req.body.number, i++) {
-        roomarray.push(new room {number:[i]});
-    }
+    //var roomarray = [];
+    //console.log(req.body.number);
     
-    let hotel = await hotelCollection.create({
-        name: req.body.name,
-        room: [{number: req.body.roomnumber}]
-    })
+    const newHotel = new hotelCollection({name: req.body.name});
+    console.log(newHotel);
+
+    for (i=1; i <= req.body.number; i++) {
+        var newRoom = new room({number: i});
+        //roomarray.push(tempRoom);
+        newHotel.rooms.push(newRoom);
+    };
+
+    const savedDoc = await newHotel.save();
+    console.log(savedDoc);
+    
+    // let hotel = await hotelCollection.create({
+    //     name: req.body.name,
+    //     room: roomarray
+    // })
+
+    res.json(hotel)
     res.send('tag oplysninger i body og tilføj til et nyt hotel i controller inden det skubebs til databasen')
 }
 
@@ -38,8 +51,3 @@ module.exports.deleteHotel = async function (req, res) {
 //    "List": "Se list of hotels at /listhotels",
 //    "Add": "Add a hotel at /addHotel",
 //    "Link": "http://localhost:3000/student/addHotel"
-
-{
-    'name': 'Comwell Aarhus',
-    'room': [{}]
-}

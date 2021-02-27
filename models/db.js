@@ -1,4 +1,6 @@
+
 var mongoose = require('mongoose');
+
 let dbUrl = 'mongodb+srv://admin:Password1@cluster0.qooxs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 ;
 
