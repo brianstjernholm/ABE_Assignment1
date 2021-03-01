@@ -7,7 +7,12 @@ module.exports.homepage = async function (req, res) {
 
 module.exports.listHotels = async function (req, res) {
     //var hotels = db.find
-    res.send('Her skal der sendes en liste med hoteller tilbage fra databasen')
+    hotelCollection.find({ name: req.body.name })
+        .populate('rooms')
+        .exec((err, hotels) => {
+            if (err) { res.send({ error: err.message }); }
+            else { res.send(hotels); }
+        });
 }
 
 module.exports.addHotel = async function (req, res) {
@@ -44,7 +49,10 @@ module.exports.updateHotel = async function (req, res) {
 }
 
 module.exports.deleteHotel = async function (req, res) {
-    res.send('delete hotel matchind id in url param')
+    const hotelid = req.body.hotelid
+    var removed = await hotelCollection.findByIdAndRemove(hotelid)
+    res.send(removed)
+    //res.send(req.body.name)
 }
 
 //    res.status(201).json({

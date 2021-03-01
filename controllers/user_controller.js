@@ -21,19 +21,19 @@ exports.grantAccess = function(action, resource) {
     }
    }
     
-   exports.allowIfLoggedin = async (req, res, next) => {
-    try {
-     const user = res.locals.loggedInUser;
-     if (!user)
-      return res.status(401).json({
-       error: "Du er nødt til at være logget ind for at kunne følge denne rute"
-      });
-      req.user = user;
-      next();
-     } catch (error) {
-      next(error);
-     }
-   }
+//    exports.allowIfLoggedin = async (req, res, next) => {
+//     try {
+//      const user = res.locals.loggedInUser;
+//      if (!user)
+//       return res.status(401).json({
+//        error: "Du er nødt til at være logget ind for at kunne følge denne rute"
+//       });
+//       req.user = user;
+//       next();
+//      } catch (error) {
+//       next(error);
+//      }
+//    }
 
 async function hashPassword(password) {
     return await bcrypt.hash(password, 10);
