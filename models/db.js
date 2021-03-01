@@ -6,7 +6,6 @@ let dbUrl = 'mongodb+srv://admin:Password1@cluster0.qooxs.mongodb.net/myFirstDat
 
 //'mongodb+srv://admin:Password1@cluster0.qooxs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
-
 if (process.env.NODE_ENV === 'production') {
     dbUrl = process.env.MONGODB_URI;
 }
