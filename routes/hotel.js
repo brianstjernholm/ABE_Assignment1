@@ -3,8 +3,6 @@ const router = express.Router();
 
 const hotelController = require('../controllers/hotel_controller');
 
-const hotel = require('../models/hotel');
-
 var jwt = require('express-jwt');
 const { Router } = require('express');
 var auth = jwt({
@@ -27,7 +25,7 @@ algorithms: ["HS256"]
  *       - bearerAuth: []
  *     summary: Get a list of all hotels and rooms
  *     description: requiring a list of all hotels with rooms from the database 
- *     tags: [Hotels]
+ *     tags: [Hotel]
  *     responses:
  *       200:
  *         description: Succefully returned list of hotels
@@ -60,6 +58,8 @@ router.get('', auth, hotelController.grantAccessHotel('readAny', 'hotel'), hotel
  * @swagger
  * /hotel:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create hotel
  *     description: Create new hotel by "name" and select "number" of rooms
  *     tags: [Hotel]
@@ -111,6 +111,8 @@ router.post('', auth, hotelController.grantAccessHotel('createAny', 'hotel'), ho
  * @swagger
  * /hotel:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Delete a hotel
  *     description: Delete a hotel by id
  *     tags: [Hotel]

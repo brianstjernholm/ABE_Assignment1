@@ -12,7 +12,7 @@ const UserController = require('../controllers/user_controller');
 /////////////////////////  GET USER  /////////////////////////////
 /**
  * @swagger
- * /user/{userId}:
+ * /users/getUser/{userId}:
  *   get:
  *     security:
  *       - bearerAuth: []
@@ -54,7 +54,7 @@ router.get('/getUser/:userId', auth, UserController.grantAccess('readOwn', 'prof
 /////////////////////////  GET ALL USERS  /////////////////////////////
 /**
  * @swagger
- * /user/getAllUsers:
+ * /users/getAllUsers:
  *   get:
  *     security:
  *       - bearerAuth: []
@@ -89,19 +89,76 @@ router.get('/getAllUsers', auth, UserController.grantAccess('readAny', 'profile'
 
 
 //////////////////////////  EDIT USER ROLE  ////////////////////////////////////////
+/**
+ * @swagger
+ * /users/editUserRole/{userId}:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Change user role
+ *     description: Finds user by id and changes role
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 required: true
+ *     responses:
+ *       200:
+ *         description: Succesfully updated user role
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     role:
+ *                       type: string
+ *                     _id:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     password:
+ *                       type: string
+ *                     __v:
+ *                       type: integer
+ *                 message:
+ *                   type: string
+ */
 router.put('/editUserRole/:userId', auth, UserController.grantAccess('updateAny', 'profile'), UserController.updateUser);
 
 
 /////////////////////////  DELETE USER  /////////////////////////////
 /**
  * @swagger
- * /user/getAllUsers:
+ * /users/deleteUser/{userId}:
  *   delete:
  *     security:
  *       - bearerAuth: []
  *     summary: Delete a user
  *     description: Deletes a user by id
  *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User ID
  *     responses:
  *       200:
  *         description: Succesfully deleted user

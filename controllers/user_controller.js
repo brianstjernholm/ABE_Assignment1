@@ -5,6 +5,7 @@ const { route } = require('../routes/hotel');
 
 const { roles } = require("../roles");
 
+////////////////  ROLE AUTH  ///////////////////////
 exports.grantAccess = function(action, resource) {
     return async (req, res, next) => {
      try {
@@ -20,21 +21,9 @@ exports.grantAccess = function(action, resource) {
      }
     }
 }
-    
-//    exports.allowIfLoggedin = async (req, res, next) => {
-//     try {
-//      const user = res.locals.loggedInUser;
-//      if (!user)
-//       return res.status(401).json({
-//        error: "Du er nødt til at være logget ind for at kunne følge denne rute"
-//       });
-//       req.user = user;
-//       next();
-//      } catch (error) {
-//       next(error);
-//      }
-//    }
 
+
+////////////////  ENCRYPTION  ///////////////////////
 async function hashPassword(password) {
     return await bcrypt.hash(password, 10);
 }
@@ -43,6 +32,8 @@ async function validatePassword(plainPassword, hashedPassword) {
     return await bcrypt.compare(plainPassword, hashedPassword);
 }
 
+
+////////////////  REGISTRATION / LOGIN  ///////////////////////
 exports.signup = async (req, res, next) => {
     try {
         const { email, password, role} = req.body // HUSK at body skal indeholde de tre keys
@@ -82,8 +73,10 @@ exports.login = async(req, res, next) => {
     }
 }
 
+////////////////  CRUD  ///////////////////////
 // Middleware handling user requests
 
+// Get all users
 exports.getUsers = async (req, res, next) => {
     const users = await User.find({});
     res.status(200).json({
@@ -91,6 +84,7 @@ exports.getUsers = async (req, res, next) => {
     });
 }
 
+// Get single user
 exports.getUser = async (req, res, next) => {
     try {
         const userId = req.params.userId;
@@ -104,44 +98,23 @@ exports.getUser = async (req, res, next) => {
     }
 }
 
-// exports.updateUser = async (req, res, next) => {
-//     try {
-//         const newRole = req.body.newRole
-//         const userId = req.param.userId;
-//         const user = await User.findByIdAndUpdate(userId, { "role": newRole}, function (err, docs) {
-//             if (err){
-//                 console.log(err)
-//             } else {
-//                 console.log("Updated User : ", docs);
-//             }
-//         });
-//         //await User.findById(userId)
-//         res.status(200).json({
-//             data: user, 
-//             message: 'Brugeren er blevet opdateret'
-//         });
-//     } catch (error) {
-//         next(error)
-//     }
-// }
-
+// Change user role
 exports.updateUser = async (req, res, next) => {
     try {
-        const newRole = req.body.newRole;
-        console.log(req.param.userId);
-        const userId = req.param.userId;
-        await User.findByIdAndUpdate(userId, { "role": newRole });
-        udUser = await User.findById(userId);
-        console.log(udUser);
+        const userId = req.params.userId;
+        const newRole = req.body.role
+        const update = {role: newRole}
+        const doc = await User.findByIdAndUpdate(userId, update);
         res.status(200).json({
-            data: udUser, 
-            message: 'Brugeren er blevet opdateret'
+            data: doc,
+            message: 'Brugerens rolle er opdateret'
         });
-    } catch (error) {
+    }catch (error) {
         next(error)
     }
 }
 
+// Delete single user
 exports.deleteUser = async (req, res, next) => {
     try {
         const userId = req.params.userId;
