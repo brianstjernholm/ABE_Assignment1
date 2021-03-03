@@ -19,7 +19,7 @@ exports.grantAccess = function(action, resource) {
       next(error)
      }
     }
-   }
+}
     
 //    exports.allowIfLoggedin = async (req, res, next) => {
 //     try {
@@ -48,7 +48,7 @@ exports.signup = async (req, res, next) => {
         const { email, password, role} = req.body // HUSK at body skal indeholde de tre keys
         const hashedPassword = await hashPassword(password);
         const newUser = new User({ email, password: hashedPassword, role: role || "basic"});
-        const accessToken = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
+        const accessToken = jwt.sign({ userId: newUser._id, role: newUser.role }, process.env.JWT_SECRET, {
             expiresIn: "1d"
         });
         newUser.accessToken = accessToken;
@@ -69,7 +69,7 @@ exports.login = async(req, res, next) => {
         if (!user) return next(new Error('Email eksisterer ikke'));
         const validPassword = await validatePassword(password, user.password);
         if (!validPassword) return next(new Error('Password er ikke korrekt'))
-        const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+        const accessToken = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
             expiresIn: "1d"
         });
         await User.findByIdAndUpdate(user._id, { accessToken })
@@ -104,14 +104,37 @@ exports.getUser = async (req, res, next) => {
     }
 }
 
+// exports.updateUser = async (req, res, next) => {
+//     try {
+//         const newRole = req.body.newRole
+//         const userId = req.param.userId;
+//         const user = await User.findByIdAndUpdate(userId, { "role": newRole}, function (err, docs) {
+//             if (err){
+//                 console.log(err)
+//             } else {
+//                 console.log("Updated User : ", docs);
+//             }
+//         });
+//         //await User.findById(userId)
+//         res.status(200).json({
+//             data: user, 
+//             message: 'Brugeren er blevet opdateret'
+//         });
+//     } catch (error) {
+//         next(error)
+//     }
+// }
+
 exports.updateUser = async (req, res, next) => {
     try {
-        const update = req.body
+        const newRole = req.body.newRole;
+        console.log(req.param.userId);
         const userId = req.param.userId;
-        await User.findByIdAndUpdate(userId, update);
-        const user = await User.findById(userId)
+        await User.findByIdAndUpdate(userId, { "role": newRole });
+        udUser = await User.findById(userId);
+        console.log(udUser);
         res.status(200).json({
-            data: user, 
+            data: udUser, 
             message: 'Brugeren er blevet opdateret'
         });
     } catch (error) {

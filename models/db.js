@@ -12,19 +12,6 @@ if (process.env.NODE_ENV === 'production') {
 
 //Listening for mongoose connection events
 mongoose.connection.on('connected', () => {
-/*     const StudentSchema = new mongoose.Schema({
-        name: String,
-        age: Number
-    }) 
-
-    const Student = mongoose.model('student', StudentSchema)
-
-    const Marc = new Student({ name: 'Marc', age: 29});
-
-    Student.create(Marc);
-
-    console.log("Saved to database??"); */
-
     console.log(`Mongoose connected to ${dbUrl}`);
 });
 mongoose.connection.on('error', err => {
